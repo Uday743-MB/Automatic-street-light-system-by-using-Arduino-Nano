@@ -1,3 +1,33 @@
+Hardware Components (same as before)
+Arduino UNO
+3 × IR Sensors
+3 × LED Lights
+1 × LDR Module
+Breadboard & Jumper Wires
+Power Supply (5V)
+⚙️ Circuit Connections (Arduino UNO)
+🔹 IR Sensors
+IR Sensor	VCC	GND	OUT	Arduino UNO Pin
+IR Sensor 1	5V	GND	OUT	D8
+IR Sensor 2	5V	GND	OUT	D12
+IR Sensor 3	5V	GND	OUT	D13
+🔹 LEDs
+LED	Anode (+)	Cathode (-)	Arduino UNO Pin
+LED 1	D3	GND	D3
+LED 2	D5	GND	D5
+LED 3	D6	GND	D6
+(You can use 220Ω resistors in series with LEDs for safety)
+🔹 LDR Module
+LDR Module Pin	Arduino UNO Connection
+VCC	5V
+GND	GND
+OUT	D7
+💡 Working Principle
+When it’s daytime → LDR senses light → all street lights OFF.
+When it’s nighttime → LDR detects darkness → system activates.
+If an object (like a vehicle or person) passes near any IR sensor → that particular LED glows
+
+
 Code for Arduino nano 
 
 
@@ -95,3 +125,10 @@ analogWrite(6,500);
 
 }
 
+| Condition               | LDR Output | IR Output | LED Status |
+| ----------------------- | ---------- | --------- | ---------- |
+| Daytime                 | HIGH       | Any       | OFF        |
+| Night + No Object       | LOW        | HIGH      | OFF        |
+| Night + Object near IR1 | LOW        | IR1=LOW   | LED1 ON    |
+| Night + Object near IR2 | LOW        | IR2=LOW   | LED2 ON    |
+| Night + Object near IR3 | LOW        | IR3=LOW   | LED3 ON    |
