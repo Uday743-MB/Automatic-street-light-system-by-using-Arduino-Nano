@@ -1,0 +1,97 @@
+arduino uno connections and code 
+Circuit Connections (Arduino UNO)
+🔹 IR Sensors
+IR Sensor	VCC	GND	OUT	Arduino UNO Pin
+IR Sensor 1	5V	GND	OUT	D8
+IR Sensor 2	5V	GND	OUT	D12
+IR Sensor 3	5V	GND	OUT	D13
+🔹 LEDs
+LED	Anode (+)	Cathode (-)	Arduino UNO Pin
+LED 1	D3	GND	D3
+LED 2	D5	GND	D5
+LED 3	D6	GND	D6
+(You can use 220Ω resistors in series with LEDs for safety)
+🔹 LDR Module
+LDR Module Pin	Arduino UNO Connection
+VCC	5V
+GND	GND
+OUT	D7
+💡 Working Principle
+When it’s daytime → LDR senses light → all street lights OFF.
+When it’s nighttime → LDR detects darkness → system activates.
+If an object (like a vehicle or person) passes near any IR sensor → that particular LED glows.
+
+code 
+
+// Automatic Street Light System using Arduino UNO
+
+// Define IR sensor pins
+#define IR1 8
+#define IR2 12
+#define IR3 13
+
+// Define LED pins
+#define LED1 3
+#define LED2 5
+#define LED3 6
+
+// Define LDR pin
+#define LDR 7
+
+void setup() {
+  // Set LED pins as output
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+
+  // Set sensor pins as input
+  pinMode(IR1, INPUT);
+  pinMode(IR2, INPUT);
+  pinMode(IR3, INPUT);
+  pinMode(LDR, INPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  int ldrStatus = digitalRead(LDR);
+  int ir1Status = digitalRead(IR1);
+  int ir2Status = digitalRead(IR2);
+  int ir3Status = digitalRead(IR3);
+
+  // Print sensor values (for debugging)
+  Serial.print("LDR: ");
+  Serial.print(ldrStatus);
+  Serial.print(" | IR1: ");
+  Serial.print(ir1Status);
+  Serial.print(" | IR2: ");
+  Serial.print(ir2Status);
+  Serial.print(" | IR3: ");
+  Serial.println(ir3Status);
+
+  // Check if it's night
+  if (ldrStatus == LOW) { // LOW means dark
+    // Check each IR sensor
+    if (ir1Status == LOW) digitalWrite(LED1, HIGH); else digitalWrite(LED1, LOW);
+    if (ir2Status == LOW) digitalWrite(LED2, HIGH); else digitalWrite(LED2, LOW);
+    if (ir3Status == LOW) digitalWrite(LED3, HIGH); else digitalWrite(LED3, LOW);
+  }
+  else {
+    // Daytime: all lights off
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
+  }
+
+  delay(100);
+}
+
+
+
+Output Explanation
+Condition	LDR Output	IR Output	LED Status
+Daytime	HIGH	Any	OFF
+Night + No Object	LOW	HIGH	OFF
+Night + Object near IR1	LOW	IR1=LOW	LED1 ON
+Night + Object near IR2	LOW	IR2=LOW	LED2 ON
+Night + Object near IR3	LOW	IR3=LOW	LED3 ON
